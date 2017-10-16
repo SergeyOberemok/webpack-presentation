@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>To Do List</title>
+
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap-theme.min.css">
+    <link rel="stylesheet" href="font-awesome.min.css">
+    <link rel="stylesheet" href="jquery-ui.min.css">
+    <link rel="stylesheet" href="toastr.min.css">
+
+    <link rel="stylesheet" href="src/css/index.css">
+</head>
+
+<body>
+
+    <main>
+        <div class="container">
+            <!-- title -->
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <h1>To Do List</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- task list -->
+                    <div class="task-list">
+                        <div class="task-list__template hidden">
+                            <div class="row">
+                                <!-- check -->
+                                <div class="task-list__task-status col-xs-3 col-sm-1">
+                                    <input type="checkbox"><i class="fa fa-flag"></i>
+                                </div>
+                                <!-- title -->
+                                <div class="task-list__task-title col-xs-9 col-sm-7"></div>
+                                <!-- date -->
+                                <div class="task-list__task-deadline col-sm-3"></div>
+                                <!-- ellipsis -->
+                                <div class="col-sm-1 text-right">
+                                    <a href="#" class="task-list__task-ellipsis dropdown-toggle" data-toggle="dropdown">
+                                        <i class="fa fa-ellipsis-h"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#" data-priority="urgent" class="task-list__priority-list-item"><i class="fa fa-flag text-danger"></i> Urgent</a></li>
+                                        <li><a href="#" data-priority="high" class="task-list__priority-list-item"><i class="fa fa-flag text-warning"></i> High</a></li>
+                                        <li><a href="#" data-priority="normal" class="task-list__priority-list-item"><i class="fa fa-flag"></i> Normal</a></li>
+                                        <li><a href="#" data-priority="low" class="task-list__priority-list-item"><i class="fa fa-flag text-info"></i> Low</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#" class="task-list__task-delete">Delete</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- add -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="add-task">
+                        <a href="#" class="add-task__icon">
+                            <i class="fa fa-plus"></i> Add task
+                        </a>
+                        <form action="" class="add-task__form">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="add-task__title form-control">
+                                    <input type="text" class="add-task__deadline-input form-control">
+                                    <span class="input-group-btn">
+                                        <button class="add-task__deadline btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+                                        <button class="btn btn-default" data-toggle="dropdown" type="button"><i class="fa fa-ellipsis-h"></i></button>
+                                        <ul class="add-task__priority-list dropdown-menu">
+                                            <li><a href="#" data-priority="urgent"><i class="fa fa-flag text-danger"></i> Urgent</a></li>
+                                            <li><a href="#" data-priority="high"><i class="fa fa-flag text-warning"></i> High</a></li>
+                                            <li><a href="#" data-priority="normal"><i class="fa fa-flag"></i> Normal</a></li>
+                                            <li><a href="#" data-priority="low"><i class="fa fa-flag text-info"></i> Low</a></li>
+                                        </ul>
+                                        <button class="add-task__form-add btn btn-default" type="button">Add</button>
+                                        <button class="add-task__form-cancel btn btn-default" type="button">Cancel</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <script src="jquery-ui.min.js"></script>
+    <script src="toastr.min.js"></script>
+
+
+    <script src="src/js/App.js"></script>
+
+    <script src="src/js/data-layer/urls.js"></script>
+    <script src="src/js/data-layer/task.js"></script>
+
+    <script src="src/js/business-layer/AppService.js"></script>
+    <script src="src/js/business-layer/TaskService.js"></script>
+
+    <script src="src/js/presentational-layer/TaskController.js"></script>
+    <script src="src/js/presentational-layer/TaskListController.js"></script>
+    <script src="src/js/presentational-layer/AddTaskController.js"></script>
+
+    <script src="src/js/index.js"></script>
+</body>
+
+</html>
