@@ -18,7 +18,7 @@ TaskService.prototype.getTaskList = function () {
     var deferred = $.Deferred();
 
     if (this.taskList !== null) {
-        deferred.resolve(taskList);
+        deferred.resolve(this.taskList);
     } else {
         $.get(this.urls.toDoList.index,
             function (taskList) {

@@ -69,7 +69,7 @@ TaskListController.prototype.changeTaskStatus = function (task) {
             }
         }
     );
-}
+};
 
 TaskListController.prototype.putTaskToUndone = function ($task) {
     $task.removeClass('task-list__task--done').addClass('task-list__task--undone');

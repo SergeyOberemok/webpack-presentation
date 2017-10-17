@@ -33,6 +33,11 @@ module.exports = {
                         name: 'images/[name].[ext]'
                     }
                 }]
+            },
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: ['eslint-loader']
             }
         ]
     }

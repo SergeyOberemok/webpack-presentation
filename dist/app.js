@@ -757,7 +757,7 @@ TaskService.prototype.getTaskList = function () {
     var deferred = $.Deferred();
 
     if (this.taskList !== null) {
-        deferred.resolve(taskList);
+        deferred.resolve(this.taskList);
     } else {
         $.get(this.urls.toDoList.index,
             function (taskList) {
@@ -982,7 +982,7 @@ TaskListController.prototype.changeTaskStatus = function (task) {
             }
         }
     );
-}
+};
 
 TaskListController.prototype.putTaskToUndone = function ($task) {
     $task.removeClass('task-list__task--done').addClass('task-list__task--undone');
