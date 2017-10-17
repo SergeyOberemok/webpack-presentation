@@ -1,15 +1,12 @@
-(function (App) {
-    'use strict';
+var App = require('../App');
 
-    var dataLayer = App.define('App.dataLayer');
+var dataLayer = App.define('App.dataLayer');
 
-    dataLayer.urls = {
-        toDoList: {
-            index: '/to-do-list',
-            store: '/to-do-list',
-            delete: '/to-do-list/{taskId}',
-            update: '/to-do-list/{taskId}'
-        }
-    };
-    
-})(App);
+dataLayer.urls = {
+    toDoList: {
+        index: '/to-do-list',
+        store: '/to-do-list',
+        delete: '/to-do-list/{taskId}',
+        update: '/to-do-list/{taskId}'
+    }
+};

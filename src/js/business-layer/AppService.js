@@ -1,16 +1,13 @@
-(function (App) {
-    'use strict';
-    
-    var businessLayer = App.define('App.businessLayer');
+var App = require('../App');
 
-    var AppService = function () {
-        if (typeof AppService.instance === 'object') {
-            return AppService.instance;
-        }
+var businessLayer = App.define('App.businessLayer');
 
-        AppService.instance = this;
-    };
+var AppService = function () {
+    if (typeof AppService.instance === 'object') {
+        return AppService.instance;
+    }
 
-    businessLayer.AppService = AppService;
+    AppService.instance = this;
+};
 
-})(App);
+businessLayer.AppService = AppService;

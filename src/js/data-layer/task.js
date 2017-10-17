@@ -1,14 +1,11 @@
-(function (App) {
-    'use strict';
+var App = require('../App');
 
-    var dataLayer = App.define('App.dataLayer');
+var dataLayer = App.define('App.dataLayer');
 
-    dataLayer.task = {
-        id: 0,
-        title: '',
-        deadline: '',
-        priority: '',
-        status: false
-    };
-
-})(App);
+dataLayer.task = {
+    id: 0,
+    title: '',
+    deadline: '',
+    priority: '',
+    status: false
+};
