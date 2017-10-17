@@ -7,7 +7,8 @@
         id: 0,
         title: '',
         deadline: '',
-        priority: ''
+        priority: '',
+        status: false
     };
 
 })(App);

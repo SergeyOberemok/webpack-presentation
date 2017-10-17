@@ -13,9 +13,12 @@
         this.$template.find('.task-list__task-title').text(task.title);
         this.$template.find('.task-list__task-deadline').text(task.deadline);
         this.setPriority(this.$template, this.task.priority);
+        this.$template.addClass(task.status ? 'task-list__task--done' : 'task-list__task--undone');
+        this.$template.find('.task-list__task-status').prop('checked', task.status);
 
         this.$template.on('click', '.task-list__task-delete', this.removeTask.bind(this));
         this.$template.find('.task-list__priority-list-item').on('click', this.priorityChanged.bind(this));
+        this.$template.find('.task-list__task-status').on('click', this.statusChanged.bind(this));
     };
 
     TaskController.prototype.getElement = function () {
@@ -40,6 +43,19 @@
         });
     };
 
+    TaskController.prototype.statusChanged = function (event) {
+        var $status = $(event.target);
+
+        this.task.status = $status.prop('checked');
+
+        $status.toggleClass('disabled');
+        this.appService.taskListController.changeTaskStatus(this.task).then(
+            function () {
+                $status.toggleClass('disabled');
+            }
+        );
+    };
+
     TaskController.prototype.getBgClass = function (priority) {
         switch (priority) {
             case 'urgent':
@@ -54,7 +70,7 @@
     };
 
     TaskController.prototype.setPriority = function ($element, priority) {
-        var $priority = $element.find('.task-list__task-status').find('.fa-flag');
+        var $priority = $element.find('.task-list__task-priority');
         $priority.removeClass('text-danger text-warning text-primary text-info').addClass(this.getBgClass(priority));
     };
 

@@ -10,21 +10,24 @@ module.exports = class ToDoListController {
                 title: 'first',
                 description: '',
                 deadline: '2017-12-12',
-                priority: 'normal'
+                priority: 'normal',
+                status: false
             },
             {
                 id: ++this.increment,
                 title: 'second',
                 description: '',
                 deadline: '2017-11-12',
-                priority: 'urgent'
+                priority: 'urgent',
+                status: false
             },
             {
                 id: ++this.increment,
                 title: 'third',
                 description: '',
                 deadline: '2017-11-12',
-                priority: 'high'
+                priority: 'high',
+                status: false
             }
         ];
 
@@ -39,7 +42,8 @@ module.exports = class ToDoListController {
                 title: req.body.title,
                 description: req.body.description,
                 deadline: req.body.deadline,
-                priority: req.body.priority
+                priority: req.body.priority,
+                status: false
             };
 
             self.toDoList.push(task);
@@ -77,6 +81,7 @@ module.exports = class ToDoListController {
                     item.description = req.body.description;
                     item.deadline = req.body.deadline;
                     item.priority = req.body.priority;
+                    item.status = req.body.status;
 
                     found = true;
                     break;

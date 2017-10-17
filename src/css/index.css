@@ -37,11 +37,27 @@
     visibility: hidden;
 }
 
-.task-list__task-status .fa-flag {
+.task-list__task-state .task-list__task-priority {
     margin-left: 5px;
     position: relative;
     top: -2px;
 }
-.task-list__task-status .fa-flag.text-primary {
+.task-list__task-state .task-list__task-priority.text-primary {
+    display: none;
+}
+
+.task-list__task--done {
+    color: rgb(220, 220, 220);
+}
+.task-list__task--done .task-list__task-priority {
+    visibility: hidden;
+}
+.task-list__task--done .task-list__task-title {
+    text-decoration: line-through;
+}
+.task-list__task--done .task-list__priority-list-item {
+    display: none;
+}
+.task-list__task--done .divider {
     display: none;
 }
