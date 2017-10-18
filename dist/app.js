@@ -416,17 +416,6 @@ TaskListController.prototype.removeTask = function (task) {
     );
 };
 
-TaskListController.prototype.removeTask = function (task) {
-    var self = this;
-
-    presentationalLayer.TaskListController = TaskListController;
-    this.taskService.deleteTask(task).then(
-        function () {
-            self.$taskList.find('#task_' + task.id).remove();
-        }
-    );
-};
-
 TaskListController.prototype.changeTaskStatus = function (task) {
     var self = this;
 
