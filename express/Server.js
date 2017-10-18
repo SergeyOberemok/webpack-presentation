@@ -13,7 +13,7 @@ module.exports = class Server {
         ]);
 
         this.app.get('/', function (req, res) {
-            res.sendFile(path.resolve(__dirname, '../dist/index.html'));
+            res.sendFile(path.resolve(__dirname, '../src/index.html'));
         });
 
         new ToDoListController(this.app);

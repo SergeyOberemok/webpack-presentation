@@ -16,9 +16,11 @@ module.exports = {
         rules: [
             {
                 test: /\.css$/,
-                use: ExtractTextPlugin.extract({
-                    use: ['css-loader']
-                })
+                use: inProduction ?
+                    ExtractTextPlugin.extract({
+                        use: ['css-loader']
+                    }) :
+                    ['style-loader', 'css-loader']
             },
             {
                 test: /\.(woff|woff2|eot|ttf|otf|svg)$/,
@@ -56,15 +58,15 @@ module.exports = {
             {
                 test: /\.s[ac]ss$/,
                 exclude: /node_modules/,
-                use: ExtractTextPlugin.extract({
-                    use: ['css-loader', 'sass-loader']
-                })
+                use: inProduction ?
+                    ExtractTextPlugin.extract({
+                        use: ['css-loader', 'sass-loader']
+                    }) :
+                    ['style-loader', 'css-loader', 'sass-loader']
             }
         ]
     },
     plugins: [
-        new ExtractTextPlugin('[name].css'),
-
         new webpack.LoaderOptionsPlugin({
             minimize: inProduction
         }),
@@ -72,12 +74,25 @@ module.exports = {
         new webpack.DefinePlugin({
             'process.env.inProduction': inProduction
         })
-    ]
+    ],
+    devServer: {
+        hot: true,
+        host: 'localhost',
+        port: 9000,
+        proxy: {
+            '/': 'http://localhost:3000'
+        },
+        contentBase: path.resolve(__dirname, 'dist')
+    }
 };
 
 if (inProduction) {
+    module.exports.plugins.push(new ExtractTextPlugin('[name].css'));
+
     module.exports.plugins.push(new webpack.optimize.UglifyJsPlugin({
         sourceMap: false,
         exclude: /node_modules/
     }));
+} else {
+    module.exports.plugins.push(new webpack.HotModuleReplacementPlugin());
 }
