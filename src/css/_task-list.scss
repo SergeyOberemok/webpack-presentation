@@ -1,0 +1,48 @@
+.task-list {
+    margin-bottom: 10px;
+}
+
+.task-list__task {
+    padding: 5px 0;
+    border-bottom: 1px solid rgb(240, 240, 240);
+
+    a.task-list__task-ellipsis {
+        visibility: hidden;
+    }
+    &:hover {
+        background-color: rgb(245, 245, 245);
+
+        a.task-list__task-ellipsis {
+            visibility: visible;
+        }
+    }
+}
+
+.task-list__task-state {
+    .task-list__task-priority {
+        margin-left: 5px;
+        position: relative;
+        top: -2px;
+
+        &.text-primary {
+            display: none;
+        }
+    }
+}
+
+.task-list__task--done {
+    color: rgb(220, 220, 220);
+
+    .task-list__task-priority {
+        visibility: hidden;
+    }
+    .task-list__task-title {
+        text-decoration: line-through;
+    }
+    .task-list__priority-list-item {
+        display: none;
+    }
+    .divider {
+        display: none;
+    }
+}

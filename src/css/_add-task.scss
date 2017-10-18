@@ -1,0 +1,24 @@
+.add-task {
+    .add-task__icon {
+        display: inline;
+    }
+    .add-task__form {
+        display: none;
+    }
+    &.add-task--active {
+        .add-task__icon {
+            display: none;
+        }
+        .add-task__form {
+            display: block;
+        }
+    }
+
+    .add-task__deadline-input {
+        width: 0;
+        max-width: 0;
+        padding: 0;
+        border: none;
+        visibility: hidden;
+    }
+}

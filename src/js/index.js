@@ -13,4 +13,4 @@ let appService = new App.businessLayer.AppService();
 appService.taskListController = new App.presentationalLayer.TaskListController($('.task-list'));
 appService.addTaskController = new App.presentationalLayer.AddTaskController($('.add-task'));
 
-require('../css/index.css');
+require('../css/index.scss');

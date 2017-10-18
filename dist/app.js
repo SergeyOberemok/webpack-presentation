@@ -1212,8 +1212,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../node_modules/css-loader/index.js!./index.css", function() {
-			var newContent = require("!!../../node_modules/css-loader/index.js!./index.css");
+		module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./index.scss", function() {
+			var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/lib/loader.js!./index.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1231,7 +1231,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, ".add-task .add-task__icon {\n    display: inline;\n}\n.add-task.add-task--active .add-task__icon {\n    display: none;\n}\n\n.add-task .add-task__form {\n    display: none;\n}\n.add-task.add-task--active .add-task__form {\n    display: block;\n}\n\n.task-list {\n    margin-bottom: 10px;\n}\n.task-list__task {\n    padding: 5px 0;\n    border-bottom: 1px solid rgb(240, 240, 240);\n}\n.task-list__task a.task-list__task-ellipsis {\n    visibility: hidden;\n}\n.task-list__task:hover {\n    background-color: rgb(245, 245, 245);\n}\n.task-list__task:hover a.task-list__task-ellipsis {\n    visibility: visible;\n}\n\n.add-task__deadline-input {\n    width: 0;\n    max-width: 0;\n    padding: 0;\n    border: none;\n    visibility: hidden;\n}\n\n.task-list__task-state .task-list__task-priority {\n    margin-left: 5px;\n    position: relative;\n    top: -2px;\n}\n.task-list__task-state .task-list__task-priority.text-primary {\n    display: none;\n}\n\n.task-list__task--done {\n    color: rgb(220, 220, 220);\n}\n.task-list__task--done .task-list__task-priority {\n    visibility: hidden;\n}\n.task-list__task--done .task-list__task-title {\n    text-decoration: line-through;\n}\n.task-list__task--done .task-list__priority-list-item {\n    display: none;\n}\n.task-list__task--done .divider {\n    display: none;\n}", ""]);
+exports.push([module.i, ".add-task .add-task__icon {\n  display: inline; }\n\n.add-task .add-task__form {\n  display: none; }\n\n.add-task.add-task--active .add-task__icon {\n  display: none; }\n\n.add-task.add-task--active .add-task__form {\n  display: block; }\n\n.add-task .add-task__deadline-input {\n  width: 0;\n  max-width: 0;\n  padding: 0;\n  border: none;\n  visibility: hidden; }\n\n.task-list {\n  margin-bottom: 10px; }\n\n.task-list__task {\n  padding: 5px 0;\n  border-bottom: 1px solid #f0f0f0; }\n  .task-list__task a.task-list__task-ellipsis {\n    visibility: hidden; }\n  .task-list__task:hover {\n    background-color: whitesmoke; }\n    .task-list__task:hover a.task-list__task-ellipsis {\n      visibility: visible; }\n\n.task-list__task-state .task-list__task-priority {\n  margin-left: 5px;\n  position: relative;\n  top: -2px; }\n  .task-list__task-state .task-list__task-priority.text-primary {\n    display: none; }\n\n.task-list__task--done {\n  color: gainsboro; }\n  .task-list__task--done .task-list__task-priority {\n    visibility: hidden; }\n  .task-list__task--done .task-list__task-title {\n    text-decoration: line-through; }\n  .task-list__task--done .task-list__priority-list-item {\n    display: none; }\n  .task-list__task--done .divider {\n    display: none; }\n", ""]);
 
 // exports
 
