@@ -1,13 +1,19 @@
-var App = require('../App');
+let App = require('../App');
 
-var businessLayer = App.define('App.businessLayer');
+let businessLayer = App.define('App.businessLayer');
 
-var AppService = function () {
-    if (typeof AppService.instance === 'object') {
-        return AppService.instance;
+let instance = null;
+
+businessLayer.AppService = class AppService {
+
+    constructor() {
+        if (instance !== null) {
+            return instance;
+        }
+
+        instance = this;
+
+        return instance;
     }
 
-    AppService.instance = this;
 };
-
-businessLayer.AppService = AppService;

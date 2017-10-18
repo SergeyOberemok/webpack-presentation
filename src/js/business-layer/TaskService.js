@@ -1,80 +1,85 @@
-var App = require('../App');
+let App = require('../App');
 
-var businessLayer = App.define('App.businessLayer');
+let businessLayer = App.define('App.businessLayer');
 
-var TaskService = function () {
-    if (typeof TaskService.instance === 'object') {
-        return TaskService.instance;
+let instance = null;
+
+businessLayer.TaskService = class TaskService {
+
+    constructor() {
+        if (instance !== null) {
+            return instance;
+        }
+        instance = this;
+
+        this.taskList = null;
+        this.urls = App.dataLayer.urls;
+
+        return instance;
     }
 
-    TaskService.instance = this;
+    getTaskList() {
+        let self = this;
+        let deferred = $.Deferred();
 
-    this.taskList = null;
-    this.urls = App.dataLayer.urls;
-};
+        if (this.taskList !== null) {
+            deferred.resolve(this.taskList);
+        } else {
+            $.get(this.urls.toDoList.index,
+                (taskList) => {
+                    self.taskList = taskList;
 
-TaskService.prototype.getTaskList = function () {
-    var self = this;
-    var deferred = $.Deferred();
+                    deferred.resolve(taskList);
+                }
+            ).fail((response) => {
+                deferred.reject(response);
+            });
+        }
 
-    if (this.taskList !== null) {
-        deferred.resolve(this.taskList);
-    } else {
-        $.get(this.urls.toDoList.index,
-            function (taskList) {
-                self.taskList = taskList;
+        return deferred.promise();
+    }
 
-                deferred.resolve(taskList);
+    storeTask(task) {
+        return $.post(this.urls.toDoList.store, JSON.stringify(task),
+            (storedTask) => {
+                task.id = storedTask.id;
+
+                toastr.success('Task stored successfully', 'Response');
             }
-        ).fail(function (response) {
-            deferred.reject(response);
+        ).fail((response) => {
+            toastr.error('Error', 'Response');
+
+            return response;
         });
     }
 
-    return deferred.promise();
+    deleteTask(task) {
+        let self = this;
+
+        return $.ajax({
+            url: this.urls.toDoList.delete.replace('{taskId}', task.id),
+            type: 'DELETE',
+            success: (response) => {
+                self.taskList.splice(self.taskList.indexOf(task), 1);
+
+                toastr.success('Task deleted successfully', 'Response');
+            }
+        }).fail((response) => {
+            toastr.error('Task isn\'t deleted', 'Error');
+        });
+    }
+
+    updateTask(task) {
+        return $.ajax({
+            url: this.urls.toDoList.update.replace('{taskId}', task.id),
+            type: 'PUT',
+            data: JSON.stringify(task),
+            success: (response) => {
+                toastr.success('Task updated successfully', 'Response');
+            }
+        }).fail((response) => {
+            toastr.error('Task isn\'t updated', 'Error');
+        });
+    }
+
 };
-
-TaskService.prototype.storeTask = function (task) {
-    return $.post(this.urls.toDoList.store, JSON.stringify(task),
-        function (storedTask) {
-            task.id = storedTask.id;
-
-            toastr.success('Task stored successfully', 'Response');
-        }
-    ).fail(function (response) {
-        toastr.error('Error', 'Response');
-
-        return response;
-    });
-};
-
-TaskService.prototype.deleteTask = function (task) {
-    var self = this;
-
-    return $.ajax({
-        url: this.urls.toDoList.delete.replace('{taskId}', task.id),
-        type: 'DELETE',
-        success: function (response) {
-            self.taskList.splice(self.taskList.indexOf(task), 1);
-
-            toastr.success('Task deleted successfully', 'Response');
-        }
-    }).fail(function (response) {
-        toastr.error('Task isn\'t deleted', 'Error');
-    });
-};
-
-TaskService.prototype.updateTask = function (task) {
-    return $.ajax({
-        url: this.urls.toDoList.update.replace('{taskId}', task.id),
-        type: 'PUT',
-        data: JSON.stringify(task),
-        success: function (response) {
-            toastr.success('Task updated successfully', 'Response');
-        }
-    }).fail(function (response) {
-        toastr.error('Task isn\'t updated', 'Error');
-    });
-};
-
-businessLayer.TaskService = TaskService;

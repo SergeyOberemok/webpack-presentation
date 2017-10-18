@@ -1,6 +1,6 @@
-var App = require('../App');
+let App = require('../App');
 
-var dataLayer = App.define('App.dataLayer');
+let dataLayer = App.define('App.dataLayer');
 
 dataLayer.urls = {
     toDoList: {

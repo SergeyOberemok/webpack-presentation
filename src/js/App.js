@@ -1,17 +1,17 @@
-var App = {
+let App = {
     define: _define
 };
 
 function _define(namespace) {
-    var parts = namespace.split('.');
-    var parent = App;
+    let parts = namespace.split('.');
+    let parent = App;
 
     if (parts[0] === 'App') {
         parts = parts.slice(1);
     }
 
-    for (var i = 0; i < parts.length; i++) {
-        var part = parts[i];
+    for (let i = 0; i < parts.length; i++) {
+        let part = parts[i];
 
         if (typeof parent[part] === 'undefined') {
             parent[part] = {};

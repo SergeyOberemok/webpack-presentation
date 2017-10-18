@@ -147,7 +147,10 @@ function toComment(sourceMap) {
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 
 var App = {
     define: _define
@@ -651,6 +654,9 @@ module.exports = function (css) {
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
 $.ajaxSetup({
     contentType: 'application/json'
 });
@@ -672,12 +678,18 @@ __webpack_require__(19);
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
 __webpack_require__(10);
 __webpack_require__(11);
 
 /***/ }),
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 
 var App = __webpack_require__(1);
 
@@ -696,6 +708,9 @@ dataLayer.urls = {
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
 var App = __webpack_require__(1);
 
 var dataLayer = App.define('App.dataLayer');
@@ -712,6 +727,9 @@ dataLayer.task = {
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
 __webpack_require__(13);
 __webpack_require__(14);
 
@@ -719,108 +737,136 @@ __webpack_require__(14);
 /* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var App = __webpack_require__(1);
 
 var businessLayer = App.define('App.businessLayer');
 
-var AppService = function () {
-    if (typeof AppService.instance === 'object') {
-        return AppService.instance;
+var instance = null;
+
+businessLayer.AppService = function AppService() {
+    _classCallCheck(this, AppService);
+
+    if (instance !== null) {
+        return instance;
     }
 
-    AppService.instance = this;
-};
+    instance = this;
 
-businessLayer.AppService = AppService;
+    return instance;
+};
 
 /***/ }),
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var App = __webpack_require__(1);
 
 var businessLayer = App.define('App.businessLayer');
 
-var TaskService = function () {
-    if (typeof TaskService.instance === 'object') {
-        return TaskService.instance;
+var instance = null;
+
+businessLayer.TaskService = function () {
+    function TaskService() {
+        _classCallCheck(this, TaskService);
+
+        if (instance !== null) {
+            return instance;
+        }
+        instance = this;
+
+        this.taskList = null;
+        this.urls = App.dataLayer.urls;
+
+        return instance;
     }
 
-    TaskService.instance = this;
+    _createClass(TaskService, [{
+        key: 'getTaskList',
+        value: function getTaskList() {
+            var self = this;
+            var deferred = $.Deferred();
 
-    this.taskList = null;
-    this.urls = App.dataLayer.urls;
-};
+            if (this.taskList !== null) {
+                deferred.resolve(this.taskList);
+            } else {
+                $.get(this.urls.toDoList.index, function (taskList) {
+                    self.taskList = taskList;
 
-TaskService.prototype.getTaskList = function () {
-    var self = this;
-    var deferred = $.Deferred();
-
-    if (this.taskList !== null) {
-        deferred.resolve(this.taskList);
-    } else {
-        $.get(this.urls.toDoList.index,
-            function (taskList) {
-                self.taskList = taskList;
-
-                deferred.resolve(taskList);
+                    deferred.resolve(taskList);
+                }).fail(function (response) {
+                    deferred.reject(response);
+                });
             }
-        ).fail(function (response) {
-            deferred.reject(response);
-        });
-    }
 
-    return deferred.promise();
-};
-
-TaskService.prototype.storeTask = function (task) {
-    return $.post(this.urls.toDoList.store, JSON.stringify(task),
-        function (storedTask) {
-            task.id = storedTask.id;
-
-            toastr.success('Task stored successfully', 'Response');
+            return deferred.promise();
         }
-    ).fail(function (response) {
-        toastr.error('Error', 'Response');
+    }, {
+        key: 'storeTask',
+        value: function storeTask(task) {
+            return $.post(this.urls.toDoList.store, JSON.stringify(task), function (storedTask) {
+                task.id = storedTask.id;
 
-        return response;
-    });
-};
+                toastr.success('Task stored successfully', 'Response');
+            }).fail(function (response) {
+                toastr.error('Error', 'Response');
 
-TaskService.prototype.deleteTask = function (task) {
-    var self = this;
-
-    return $.ajax({
-        url: this.urls.toDoList.delete.replace('{taskId}', task.id),
-        type: 'DELETE',
-        success: function (response) {
-            self.taskList.splice(self.taskList.indexOf(task), 1);
-
-            toastr.success('Task deleted successfully', 'Response');
+                return response;
+            });
         }
-    }).fail(function (response) {
-        toastr.error('Task isn\'t deleted', 'Error');
-    });
-};
+    }, {
+        key: 'deleteTask',
+        value: function deleteTask(task) {
+            var self = this;
 
-TaskService.prototype.updateTask = function (task) {
-    return $.ajax({
-        url: this.urls.toDoList.update.replace('{taskId}', task.id),
-        type: 'PUT',
-        data: JSON.stringify(task),
-        success: function (response) {
-            toastr.success('Task updated successfully', 'Response');
+            return $.ajax({
+                url: this.urls.toDoList.delete.replace('{taskId}', task.id),
+                type: 'DELETE',
+                success: function success(response) {
+                    self.taskList.splice(self.taskList.indexOf(task), 1);
+
+                    toastr.success('Task deleted successfully', 'Response');
+                }
+            }).fail(function (response) {
+                toastr.error('Task isn\'t deleted', 'Error');
+            });
         }
-    }).fail(function (response) {
-        toastr.error('Task isn\'t updated', 'Error');
-    });
-};
+    }, {
+        key: 'updateTask',
+        value: function updateTask(task) {
+            return $.ajax({
+                url: this.urls.toDoList.update.replace('{taskId}', task.id),
+                type: 'PUT',
+                data: JSON.stringify(task),
+                success: function success(response) {
+                    toastr.success('Task updated successfully', 'Response');
+                }
+            }).fail(function (response) {
+                toastr.error('Task isn\'t updated', 'Error');
+            });
+        }
+    }]);
 
-businessLayer.TaskService = TaskService;
+    return TaskService;
+}();
 
 /***/ }),
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 
 __webpack_require__(16);
 __webpack_require__(17);
@@ -830,277 +876,320 @@ __webpack_require__(18);
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var App = __webpack_require__(1);
 
 var presentationalLayer = App.define('App.presentationalLayer');
 
-var TaskController = function (task, $template) {
-    this.task = task;
-    this.$template = $template;
-    this.appService = new App.businessLayer.AppService();
-    this.taskService = new App.businessLayer.TaskService();
+presentationalLayer.TaskController = function () {
+    function TaskController(task, $template) {
+        _classCallCheck(this, TaskController);
 
-    this.$template.attr('id', 'task_' + task.id);
-    this.$template.find('.task-list__task-title').text(task.title);
-    this.$template.find('.task-list__task-deadline').text(task.deadline);
-    this.setPriority(this.$template, this.task.priority);
-    this.$template.addClass(task.status ? 'task-list__task--done' : 'task-list__task--undone');
-    this.$template.find('.task-list__task-status').prop('checked', task.status);
+        this.task = task;
+        this.$template = $template;
+        this.appService = new App.businessLayer.AppService();
+        this.taskService = new App.businessLayer.TaskService();
 
-    this.$template.on('click', '.task-list__task-delete', this.removeTask.bind(this));
-    this.$template.find('.task-list__priority-list-item').on('click', this.priorityChanged.bind(this));
-    this.$template.find('.task-list__task-status').on('click', this.statusChanged.bind(this));
-};
+        this.$template.attr('id', 'task_' + task.id);
+        this.$template.find('.task-list__task-title').text(task.title);
+        this.$template.find('.task-list__task-deadline').text(task.deadline);
+        this.setPriority(this.$template, this.task.priority);
+        this.$template.addClass(task.status ? 'task-list__task--done' : 'task-list__task--undone');
+        this.$template.find('.task-list__task-status').prop('checked', task.status);
 
-TaskController.prototype.getElement = function () {
-    return this.$template;
-};
-
-TaskController.prototype.removeTask = function (event) {
-    this.appService.taskListController.removeTask(this.task);
-};
-
-TaskController.prototype.priorityChanged = function (event) {
-    var $a = $(event.target);
-    if (!$a.is('a')) {
-        $a = $a.closest('a');
+        this.$template.on('click', '.task-list__task-delete', this.removeTask.bind(this));
+        this.$template.find('.task-list__priority-list-item').on('click', this.priorityChanged.bind(this));
+        this.$template.find('.task-list__task-status').on('click', this.statusChanged.bind(this));
     }
 
-    this.task.priority = $a.data('priority');
-
-    var self = this;
-    this.taskService.updateTask(this.task).then(function () {
-        self.setPriority($a.closest('.task-list__task'), self.task.priority);
-    });
-};
-
-TaskController.prototype.statusChanged = function (event) {
-    var $status = $(event.target);
-
-    this.task.status = $status.prop('checked');
-
-    $status.toggleClass('disabled');
-    this.appService.taskListController.changeTaskStatus(this.task).then(
-        function () {
-            $status.toggleClass('disabled');
+    _createClass(TaskController, [{
+        key: 'getElement',
+        value: function getElement() {
+            return this.$template;
         }
-    );
-};
+    }, {
+        key: 'removeTask',
+        value: function removeTask(event) {
+            this.appService.taskListController.removeTask(this.task);
+        }
+    }, {
+        key: 'priorityChanged',
+        value: function priorityChanged(event) {
+            var $a = $(event.target);
+            if (!$a.is('a')) {
+                $a = $a.closest('a');
+            }
 
-TaskController.prototype.getBgClass = function (priority) {
-    switch (priority) {
-        case 'urgent':
-            return 'text-danger';
-        case 'high':
-            return 'text-warning';
-        case 'low':
-            return 'text-info';
-        default:
-            return 'text-primary';
-    }
-};
+            this.task.priority = $a.data('priority');
 
-TaskController.prototype.setPriority = function ($element, priority) {
-    var $priority = $element.find('.task-list__task-priority');
-    $priority.removeClass('text-danger text-warning text-primary text-info').addClass(this.getBgClass(priority));
-};
+            var self = this;
+            this.taskService.updateTask(this.task).then(function () {
+                self.setPriority($a.closest('.task-list__task'), self.task.priority);
+            });
+        }
+    }, {
+        key: 'statusChanged',
+        value: function statusChanged(event) {
+            var $status = $(event.target);
 
-presentationalLayer.TaskController = TaskController;
+            this.task.status = $status.prop('checked');
+
+            $status.toggleClass('disabled');
+            this.appService.taskListController.changeTaskStatus(this.task).then(function () {
+                $status.toggleClass('disabled');
+            });
+        }
+    }, {
+        key: 'getBgClass',
+        value: function getBgClass(priority) {
+            switch (priority) {
+                case 'urgent':
+                    return 'text-danger';
+                case 'high':
+                    return 'text-warning';
+                case 'low':
+                    return 'text-info';
+                default:
+                    return 'text-primary';
+            }
+        }
+    }, {
+        key: 'setPriority',
+        value: function setPriority($element, priority) {
+            var $priority = $element.find('.task-list__task-priority');
+            $priority.removeClass('text-danger text-warning text-primary text-info').addClass(this.getBgClass(priority));
+        }
+    }]);
+
+    return TaskController;
+}();
 
 /***/ }),
 /* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var App = __webpack_require__(1);
 
 var presentationalLayer = App.define('App.presentationalLayer');
 
-var TaskListController = function ($taskList) {
-    this.$taskList = $taskList;
-    this.taskList = null;
-    this.taskService = new App.businessLayer.TaskService();
+presentationalLayer.TaskListController = function () {
+    function TaskListController($taskList) {
+        _classCallCheck(this, TaskListController);
 
-    this.taskService.getTaskList().then(this.setTaskList.bind(this));
-};
+        this.$taskList = $taskList;
+        this.taskList = null;
+        this.taskService = new App.businessLayer.TaskService();
+        this.$taskTemplate = null;
 
-TaskListController.prototype.setTaskList = function (taskList) {
-    this.taskList = taskList;
-
-    this.renderTaskList();
-};
-
-TaskListController.prototype.renderTaskList = function () {
-    for (var i = 0; i < this.taskList.length; i++) {
-        var task = this.taskList[i];
-
-        this.renderTask(task);
+        this.taskService.getTaskList().then(this.setTaskList.bind(this));
     }
-};
 
-TaskListController.prototype.renderTask = (function () {
-    var $taskTemplateClone = null;
-    var $taskTemplate = null;
+    _createClass(TaskListController, [{
+        key: 'setTaskList',
+        value: function setTaskList(taskList) {
+            this.taskList = taskList;
 
-    return function (task) {
-        if ($taskTemplate === null) {
-            $taskTemplate = this.$taskList.find('.task-list__template');
+            this.renderTaskList();
         }
+    }, {
+        key: 'renderTaskList',
+        value: function renderTaskList() {
+            for (var i = 0; i < this.taskList.length; i++) {
+                var task = this.taskList[i];
 
-        var taskController = new App.presentationalLayer.TaskController(
-            task,
-            $taskTemplate.clone().removeClass().addClass('task-list__task')
-        );
-
-        if (task.status) {
-            this.putTaskToDone(taskController.getElement());
-        } else {
-            this.putTaskToUndone(taskController.getElement());
-        }
-    };
-})();
-
-TaskListController.prototype.removeTask = function (task) {
-    var self = this;
-
-    this.taskService.deleteTask(task).then(
-        function () {
-            self.$taskList.find('#task_' + task.id).remove();
-        }
-    );
-};
-
-TaskListController.prototype.changeTaskStatus = function (task) {
-    var self = this;
-
-    return this.taskService.updateTask(task).then(
-        function () {
-            var $task = self.$taskList.find('#task_' + task.id).detach();
-            if (task.status) {
-                self.putTaskToDone($task);
-            } else {
-                self.putTaskToUndone($task);
+                this.renderTask(task);
             }
         }
-    );
-};
+    }, {
+        key: 'renderTask',
+        value: function renderTask(task) {
+            if (this.$taskTemplate === null) {
+                this.$taskTemplate = this.$taskList.find('.task-list__template');
+            }
 
-TaskListController.prototype.putTaskToUndone = function ($task) {
-    $task.removeClass('task-list__task--done').addClass('task-list__task--undone');
+            var taskController = new App.presentationalLayer.TaskController(task, this.$taskTemplate.clone().removeClass().addClass('task-list__task'));
 
-    var undoneList = this.$taskList.find('.task-list__task--undone');
-    if (undoneList.length) {
-        undoneList.last().after($task);
-    } else {
-        this.$taskList.prepend($task);
-    }
-};
+            if (task.status) {
+                this.putTaskToDone(taskController.getElement());
+            } else {
+                this.putTaskToUndone(taskController.getElement());
+            }
+        }
+    }, {
+        key: 'removeTask',
+        value: function removeTask(task) {
+            var self = this;
 
-TaskListController.prototype.putTaskToDone = function ($task) {
-    $task.removeClass('task-list__task--undone').addClass('task-list__task--done');
+            this.taskService.deleteTask(task).then(function () {
+                self.$taskList.find('#task_' + task.id).remove();
+            });
+        }
+    }, {
+        key: 'changeTaskStatus',
+        value: function changeTaskStatus(task) {
+            var self = this;
 
-    var doneList = this.$taskList.find('.task-list__task--done');
-    if (doneList.length) {
-        doneList.last().after($task);
-    } else {
-        this.$taskList.append($task);
-    }
-};
+            return this.taskService.updateTask(task).then(function () {
+                var $task = self.$taskList.find('#task_' + task.id).detach();
+                if (task.status) {
+                    self.putTaskToDone($task);
+                } else {
+                    self.putTaskToUndone($task);
+                }
+            });
+        }
+    }, {
+        key: 'putTaskToUndone',
+        value: function putTaskToUndone($task) {
+            $task.removeClass('task-list__task--done').addClass('task-list__task--undone');
 
-presentationalLayer.TaskListController = TaskListController;
+            var undoneList = this.$taskList.find('.task-list__task--undone');
+            if (undoneList.length) {
+                undoneList.last().after($task);
+            } else {
+                this.$taskList.prepend($task);
+            }
+        }
+    }, {
+        key: 'putTaskToDone',
+        value: function putTaskToDone($task) {
+            $task.removeClass('task-list__task--undone').addClass('task-list__task--done');
+
+            var doneList = this.$taskList.find('.task-list__task--done');
+            if (doneList.length) {
+                doneList.last().after($task);
+            } else {
+                this.$taskList.append($task);
+            }
+        }
+    }]);
+
+    return TaskListController;
+}();
 
 /***/ }),
 /* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var App = __webpack_require__(1);
 
 var presentationalLayer = App.define('App.presentationalLayer');
 
-var AddTaskController = function ($addTask) {
-    this.$addTask = $addTask;
+presentationalLayer.AddTaskController = function () {
+    function AddTaskController($addTask) {
+        _classCallCheck(this, AddTaskController);
 
-    this.appService = new App.businessLayer.AppService();
-    this.taskService = new App.businessLayer.TaskService();
+        this.$addTask = $addTask;
 
-    this.$addTask.children('a.add-task__icon').on('click', this.plusIconClicked.bind(this));
-    this.$addTask.find('.add-task__form-cancel').on('click', this.cancelClicked.bind(this));
-    this.$addTask.find('.add-task__form-add').on('click', this.addClicked.bind(this));
-    this.$addTask.find('.add-task__title').on('change', this.titleChanged.bind(this));
-    this.$addTask.find('.add-task__deadline-input').datepicker({
-        dateFormat: 'yy-mm-dd',
-        minDate: 0
-    }).on('change', this.deadlineChanged.bind(this));
-    this.$addTask.find('.add-task__deadline').on('click', this.deadlineClicked.bind(this));
-    this.$addTask.find('.add-task__priority-list').find('a').on('click', this.priorityChanged.bind(this));
+        this.appService = new App.businessLayer.AppService();
+        this.taskService = new App.businessLayer.TaskService();
 
-    this.task = null;
-};
+        this.$addTask.children('a.add-task__icon').on('click', this.plusIconClicked.bind(this));
+        this.$addTask.find('.add-task__form-cancel').on('click', this.cancelClicked.bind(this));
+        this.$addTask.find('.add-task__form-add').on('click', this.addClicked.bind(this));
+        this.$addTask.find('.add-task__title').on('change', this.titleChanged.bind(this));
+        this.$addTask.find('.add-task__deadline-input').datepicker({
+            dateFormat: 'yy-mm-dd',
+            minDate: 0
+        }).on('change', this.deadlineChanged.bind(this));
+        this.$addTask.find('.add-task__deadline').on('click', this.deadlineClicked.bind(this));
+        this.$addTask.find('.add-task__priority-list').find('a').on('click', this.priorityChanged.bind(this));
 
-AddTaskController.prototype.plusIconClicked = function (event) {
-    this.task = $.extend({}, App.dataLayer.task);
+        this.task = null;
+    }
 
-    this.$addTask.toggleClass('add-task--active');
+    _createClass(AddTaskController, [{
+        key: 'plusIconClicked',
+        value: function plusIconClicked(event) {
+            this.task = $.extend({}, App.dataLayer.task);
 
-    this.$addTask.find('.add-task__form').find('input').focus();
-};
+            this.$addTask.toggleClass('add-task--active');
 
-AddTaskController.prototype.cancelClicked = function (event) {
-    this.$addTask.toggleClass('add-task--active');
-};
+            this.$addTask.find('.add-task__form').find('input').focus();
+        }
+    }, {
+        key: 'cancelClicked',
+        value: function cancelClicked(event) {
+            this.$addTask.toggleClass('add-task--active');
+        }
+    }, {
+        key: 'addClicked',
+        value: function addClicked(event) {
+            var self = this;
+            var $button = $(event.target);
 
-AddTaskController.prototype.addClicked = function (event) {
-    var self = this;
-    var $button = $(event.target);
+            if (this.task.title.length) {
+                $button.toggleClass('btn-default').toggleClass('btn-warning');
 
-    if (this.task.title.length) {
-        $button.toggleClass('btn-default').toggleClass('btn-warning');
+                this.taskService.storeTask(this.task).then(function () {
+                    self.appService.taskListController.renderTask(self.task);
 
-        this.taskService.storeTask(this.task).then(
-            function () {
-                self.appService.taskListController.renderTask(self.task);
-
-                $button.closest('form').get(0).reset();
-                self.task = $.extend({}, App.dataLayer.task);
-                $button.toggleClass('btn-warning').toggleClass('btn-success');
-                setTimeout(function () {
-                    $button.toggleClass('btn-success').toggleClass('btn-default');
-                }, 1000);
-            },
-            function (response) {
-                $button.toggleClass('btn-warning').toggleClass('btn-danger');
+                    $button.closest('form').get(0).reset();
+                    self.task = $.extend({}, App.dataLayer.task);
+                    $button.toggleClass('btn-warning').toggleClass('btn-success');
+                    setTimeout(function () {
+                        $button.toggleClass('btn-success').toggleClass('btn-default');
+                    }, 1000);
+                }, function (response) {
+                    $button.toggleClass('btn-warning').toggleClass('btn-danger');
+                });
+            } else {
+                toastr.warning('Title is empty');
             }
-        );
-    } else {
-        toastr.warning('Title is empty');
-    }
-};
+        }
+    }, {
+        key: 'titleChanged',
+        value: function titleChanged(event) {
+            var $input = $(event.target);
 
-AddTaskController.prototype.titleChanged = function (event) {
-    var $input = $(event.target);
+            this.task.title = $input.val();
+        }
+    }, {
+        key: 'deadlineClicked',
+        value: function deadlineClicked(event) {
+            this.$addTask.find('.add-task__deadline-input').datepicker('show');
+        }
+    }, {
+        key: 'deadlineChanged',
+        value: function deadlineChanged(event) {
+            var $input = $(event.target);
 
-    this.task.title = $input.val();
-};
+            this.task.deadline = $input.val();
+        }
+    }, {
+        key: 'priorityChanged',
+        value: function priorityChanged(event) {
+            var $a = $(event.target);
+            if (!$a.is('a')) {
+                $a = $a.closest('a');
+            }
 
-AddTaskController.prototype.deadlineClicked = function (event) {
-    this.$addTask.find('.add-task__deadline-input').datepicker('show');
-};
+            this.task.priority = $a.data('priority');
+        }
+    }]);
 
-AddTaskController.prototype.deadlineChanged = function (event) {
-    var $input = $(event.target);
-
-    this.task.deadline = $input.val();
-};
-
-AddTaskController.prototype.priorityChanged = function (event) {
-    var $a = $(event.target);
-    if (!$a.is('a')) {
-        $a = $a.closest('a');
-    }
-
-    this.task.priority = $a.data('priority');
-};
-
-presentationalLayer.AddTaskController = AddTaskController;
+    return AddTaskController;
+}();
 
 /***/ }),
 /* 19 */
