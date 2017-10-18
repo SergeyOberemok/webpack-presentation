@@ -6,7 +6,8 @@
   "scripts": {
     "server": "node express/index",
     "dev": "webpack",
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "prod": "NODE_ENV=production webpack"
   },
   "author": "",
   "license": "ISC",
@@ -48,7 +49,8 @@
     },
     "globals": {
       "$": true,
-      "toastr": true
+      "toastr": true,
+      "process": true
     },
     "extends": "eslint:recommended",
     "rules": {
